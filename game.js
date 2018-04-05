@@ -39,5 +39,34 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     diceDOM.src = "dice-" + diceValue + ".png";
     
     //Update Scores
-    
+    if (diceValue !== 1) {
+        //add score
+        totalScore += diceValue;
+        document.querySelector("#current-" + activePlayer).textContent = totalScore;
+    } else {
+        totalScore = 0;
+        document.querySelector(".dice").style.display = "none";
+        
+        //switch players
+        if (activePlayer === 0) {
+            activePlayer = 1
+            document.getElementById("current-0").textContent = "0";
+            
+            document.querySelector(".player-0-panel").classList.remove("active");
+            
+            document.querySelector(".player-1-panel").classList.add("active");
+        } else {
+            activePlayer = 0
+             document.getElementById("current-1").textContent = "0";
+            
+            document.querySelector(".player-1-panel").classList.remove("active");
+            
+            document.querySelector(".player-0-panel").classList.add("active");
+            
+        }
+        
+    }
 });
+
+
+
