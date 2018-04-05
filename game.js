@@ -10,7 +10,7 @@ GAME RULES:
 */
 
 //Global Variables
-var scores, totalScore, activePlayer;
+var scores, totalScore, activePlayer, gamePlaying;
 
 gameInit();
 
@@ -18,53 +18,60 @@ gameInit();
 //Event Listner -> When the the roll btn is clicked
 document.querySelector(".btn-roll").addEventListener("click", function () {
 
-    //Random Number Generator
-    var diceValue = Math.floor(Math.random() * 6) + 1;
-    console.log(diceValue);
+    if (gamePlaying) {
 
-    //Display the results -> Dice image
-    var diceDOM = document.querySelector(".dice");
-    diceDOM.style.display = "block";
-    diceDOM.src = "dice-" + diceValue + ".png";
+        //Random Number Generator
+        var diceValue = Math.floor(Math.random() * 6) + 1;
+        console.log(diceValue);
 
-    //Update Scores
-    if (diceValue !== 1) {
-        //add score
-        totalScore += diceValue;
-        document.querySelector("#current-" + activePlayer).textContent = totalScore;
-    } else {
-        totalScore = 0;
-        document.querySelector(".dice").style.display = "none";
+        //Display the results -> Dice image
+        var diceDOM = document.querySelector(".dice");
+        diceDOM.style.display = "block";
+        diceDOM.src = "dice-" + diceValue + ".png";
 
-        //switch players
-        nextPlayer();
+        //Update Scores
+        if (diceValue !== 1) {
+            //add score
+            totalScore += diceValue;
+            document.querySelector("#current-" + activePlayer).textContent = totalScore;
+        } else {
+            totalScore = 0;
+            document.querySelector(".dice").style.display = "none";
+
+            //switch players
+            nextPlayer();
+        }
     }
 });
 
 document.querySelector(".btn-hold").addEventListener("click", function () {
-    // Add score to global score
-    scores[activePlayer] += totalScore
 
-    //Upate UI
-    document.querySelector("#score-" + activePlayer).textContent = scores[activePlayer];
+    if (gamePlaying) {
+        // Add score to global score
+        scores[activePlayer] += totalScore
 
-    //Check if player won the game
-    if (scores[activePlayer] >= 5) {
-        document.querySelector("#name-" + activePlayer).textContent = "Winner!";
-        document.querySelector(".dice").style.display = "none";
+        //Upate UI
+        document.querySelector("#score-" + activePlayer).textContent = scores[activePlayer];
 
-        document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
+        //Check if player won the game
+        if (scores[activePlayer] >= 10) {
 
-        document.querySelector(".player-" + activePlayer + "-panel").classList.remove("active");
-        
-         document.querySelector(".btn-roll").disabled = true;
-        document.querySelector(".btn-hold").disabled = true;
-        
-    } else {
-        nextPlayer();
+            document.querySelector(".btn-hold").disabled = false;
 
-        //disable hold btn after clicked once
-        document.querySelector(".btn-hold").disabled = true;
+            document.querySelector("#name-" + activePlayer).textContent = "Winner!";
+            document.querySelector(".dice").style.display = "none";
+
+            document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
+
+            document.querySelector(".player-" + activePlayer + "-panel").classList.remove("active");
+            gamePlaying = false;
+
+        } else {
+            nextPlayer();
+
+            //disable hold btn after clicked once
+            //document.querySelector(".btn-hold").disabled = true;
+        }
     }
 
 });
@@ -76,6 +83,7 @@ function gameInit() {
     scores = [0, 0];
     totalScore = 0;
     activePlayer = 0;
+    gamePlaying = true;
 
     //Set initial scores to 0
     document.getElementById("score-0").textContent = "0";
