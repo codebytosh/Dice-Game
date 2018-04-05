@@ -32,6 +32,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     
     //Random Number Generator
     var diceValue = Math.floor(Math.random() * 6) + 1;
+    console.log(diceValue); 
     
     //Display the results -> Dice image
     var diceDOM = document.querySelector(".dice");
@@ -48,6 +49,36 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
         document.querySelector(".dice").style.display = "none";
         
         //switch players
+        nextPlayer();
+    }
+});
+
+document.querySelector(".btn-hold").addEventListener("click", function() {
+   // Add score to global score
+   scores[activePlayer] += totalScore
+    
+   //Upate UI
+    document.querySelector("#score-" + activePlayer).textContent = scores[activePlayer];
+    
+      //Check if player won the game
+    if (scores[activePlayer] >= 5){
+        document.querySelector("#name-" + activePlayer).textContent = "Winner!" ;
+        document.querySelector(".dice").style.display = "none";
+        
+        document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
+         
+        document.querySelector(".player-" + activePlayer + "-panel").classList.remove("active");
+    } else {
+        nextPlayer();
+        
+        //disable hold btn after clicked once
+        document.querySelector(".btn-hold").disabled = true;
+    }
+                           
+ });
+
+function nextPlayer() {
+        //switch players
         if (activePlayer === 0) {
             activePlayer = 1
             document.getElementById("current-0").textContent = "0";
@@ -61,12 +92,7 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
             
             document.querySelector(".player-1-panel").classList.remove("active");
             
-            document.querySelector(".player-0-panel").classList.add("active");
-            
+            document.querySelector(".player-0-panel").classList.add("active");  
         }
-        
     }
-});
-
-
 
