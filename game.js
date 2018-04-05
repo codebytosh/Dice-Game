@@ -12,33 +12,21 @@ GAME RULES:
 //Global Variables
 var scores, totalScore, activePlayer;
 
-scores = [0,0];
-totalScore = 0;
-activePlayer = 0;
+gameInit();
 
-//Set initial scores to 0
-document.getElementById("score-0").textContent = "0";
-document.getElementById("score-1").textContent = "0";
-document.getElementById("current-0").textContent = "0";
-document.getElementById("current-1").textContent = "0";
-
-//DOM
-
-//No dice image when page is first loaded - CSS
-document.querySelector(".dice").style.display = "none";
 
 //Event Listner -> When the the roll btn is clicked
-document.querySelector(".btn-roll").addEventListener("click", function() {
-    
+document.querySelector(".btn-roll").addEventListener("click", function () {
+
     //Random Number Generator
     var diceValue = Math.floor(Math.random() * 6) + 1;
-    console.log(diceValue); 
-    
+    console.log(diceValue);
+
     //Display the results -> Dice image
     var diceDOM = document.querySelector(".dice");
     diceDOM.style.display = "block";
     diceDOM.src = "dice-" + diceValue + ".png";
-    
+
     //Update Scores
     if (diceValue !== 1) {
         //add score
@@ -47,52 +35,91 @@ document.querySelector(".btn-roll").addEventListener("click", function() {
     } else {
         totalScore = 0;
         document.querySelector(".dice").style.display = "none";
-        
+
         //switch players
         nextPlayer();
     }
 });
 
-document.querySelector(".btn-hold").addEventListener("click", function() {
-   // Add score to global score
-   scores[activePlayer] += totalScore
-    
-   //Upate UI
+document.querySelector(".btn-hold").addEventListener("click", function () {
+    // Add score to global score
+    scores[activePlayer] += totalScore
+
+    //Upate UI
     document.querySelector("#score-" + activePlayer).textContent = scores[activePlayer];
-    
-      //Check if player won the game
-    if (scores[activePlayer] >= 5){
-        document.querySelector("#name-" + activePlayer).textContent = "Winner!" ;
+
+    //Check if player won the game
+    if (scores[activePlayer] >= 5) {
+        document.querySelector("#name-" + activePlayer).textContent = "Winner!";
         document.querySelector(".dice").style.display = "none";
-        
+
         document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
-         
+
         document.querySelector(".player-" + activePlayer + "-panel").classList.remove("active");
+        
+         document.querySelector(".btn-roll").disabled = true;
+        document.querySelector(".btn-hold").disabled = true;
+        
     } else {
         nextPlayer();
-        
+
         //disable hold btn after clicked once
         document.querySelector(".btn-hold").disabled = true;
     }
-                           
- });
+
+});
+
+document.querySelector(".btn-new").addEventListener("click", gameInit);
+
+
+function gameInit() {
+    scores = [0, 0];
+    totalScore = 0;
+    activePlayer = 0;
+
+    //Set initial scores to 0
+    document.getElementById("score-0").textContent = "0";
+    document.getElementById("score-1").textContent = "0";
+    document.getElementById("current-0").textContent = "0";
+    document.getElementById("current-1").textContent = "0";
+
+    document.getElementById("name-0").textContent = "Player 1";
+
+    document.getElementById("name-1").textContent = "Player 2";
+
+    document.querySelector(".player-0-panel").classList.remove("winner");
+
+    document.querySelector(".player-1-panel").classList.remove("winner");
+
+    document.querySelector(".player-0-panel").classList.remove("active");
+
+    document.querySelector(".player-1-panel").classList.remove("active");
+
+    document.querySelector(".player-0-panel").classList.add("active");
+
+
+    //DOM
+
+    //No dice image when page is first loaded - CSS
+    document.querySelector(".dice").style.display = "none";
+};
+
 
 function nextPlayer() {
-        //switch players
-        if (activePlayer === 0) {
-            activePlayer = 1
-            document.getElementById("current-0").textContent = "0";
-            
-            document.querySelector(".player-0-panel").classList.remove("active");
-            
-            document.querySelector(".player-1-panel").classList.add("active");
-        } else {
-            activePlayer = 0
-             document.getElementById("current-1").textContent = "0";
-            
-            document.querySelector(".player-1-panel").classList.remove("active");
-            
-            document.querySelector(".player-0-panel").classList.add("active");  
-        }
-    }
+    //switch players
+    if (activePlayer === 0) {
+        activePlayer = 1
+        document.getElementById("current-0").textContent = "0";
 
+        document.querySelector(".player-0-panel").classList.remove("active");
+
+        document.querySelector(".player-1-panel").classList.add("active");
+    } else {
+        activePlayer = 0
+        document.getElementById("current-1").textContent = "0";
+
+        document.querySelector(".player-1-panel").classList.remove("active");
+
+        document.querySelector(".player-0-panel").classList.add("active");
+    }
+};
